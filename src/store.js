@@ -1,10 +1,10 @@
 import { createStore } from 'vuex';
+import coach from './Store/Modules/coach';
 
 const store = createStore({
-    state: {},
-    getters: {},
-    mutations: {},
-    actions: {},
+    modules: {
+        coach,
+    },
 });
 
 export default store;
