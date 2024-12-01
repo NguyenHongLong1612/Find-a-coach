@@ -5,8 +5,8 @@
             <router-link
                 :to="goToAllCoachPage()"
                 class="all-coaches"
-                :class="{ active: isActive === 'all-coaches' }"
-                @click="btnActive('all-coaches')"
+                :class="{ active: getActive === 'all-coaches' }"
+                @click="setActive({ name: 'all-coaches' })"
             >
                 All Coaches
             </router-link>
@@ -14,8 +14,8 @@
             <router-link
                 :to="goToAllMessagePage()"
                 class="all-mess"
-                :class="{ active: isActive === 'all-mess' }"
-                @click="btnActive('all-mess')"
+                :class="{ active: getActive === 'all-mess' }"
+                @click="setActive({ name: 'all-mess' })"
             >
                 All Message
             </router-link>
@@ -24,22 +24,20 @@
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex';
 export default {
-    data() {
-        return {
-            isActive: 'all-coaches',
-        };
-    },
     methods: {
-        btnActive(nameBtn) {
-            this.isActive = nameBtn;
-        },
         goToAllCoachPage() {
             return { name: 'coach' };
         },
         goToAllMessagePage() {
             return { name: 'message' };
         },
+        ...mapActions('navigation', ['setActive']),
+    },
+
+    computed: {
+        ...mapGetters('navigation', ['getActive']),
     },
 };
 </script>

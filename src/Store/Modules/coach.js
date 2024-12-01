@@ -41,8 +41,6 @@ const coach = {
 
             commit('setList', Object.values(data));
 
-            console.log(Object.values(data));
-
             commit('setLoading', true);
 
             return Object.values(data);
