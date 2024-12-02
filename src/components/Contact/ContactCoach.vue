@@ -62,6 +62,9 @@ export default {
             };
 
             this.postMessage(obj);
+
+            this.email = '';
+            this.mess = '';
         },
     },
     async mounted() {
