@@ -37,6 +37,7 @@
                 <coach-item
                     v-for="coach in filterCoach"
                     :key="coach.id"
+                    :id="coach.id"
                     :name="coach.name"
                     :rent="coach.rent"
                     :expertise-list="coach.expertise"

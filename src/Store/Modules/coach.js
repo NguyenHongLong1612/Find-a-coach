@@ -5,6 +5,7 @@ const coach = {
     state: {
         list: [],
         isLoading: false,
+        nameCoach: '',
     },
     getters: {
         getCoachList(state) {
@@ -13,6 +14,9 @@ const coach = {
         getLoading(state) {
             return state.isLoading;
         },
+        getNameCoach(state) {
+            return state.nameCoach;
+        },
     },
     mutations: {
         setList(state, list) {
@@ -20,6 +24,13 @@ const coach = {
         },
         setLoading(state, status) {
             state.isLoading = status;
+        },
+        setNameCoach(state, payload) {
+            const id = payload.id;
+
+            const coach = state.list.find((coach) => coach.id === id);
+
+            state.nameCoach = coach.name;
         },
     },
     actions: {
@@ -44,6 +55,9 @@ const coach = {
             commit('setLoading', true);
 
             return Object.values(data);
+        },
+        setNameCoach({ commit }, payload) {
+            commit('setNameCoach', payload);
         },
     },
 };

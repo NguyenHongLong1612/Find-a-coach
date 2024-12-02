@@ -90,6 +90,25 @@ const message = {
 
             commit('deleteMessWithId', payload);
         },
+        async postMessage(_, obj) {
+            const response = await fetch(
+                'https://find-a-coach-fa63d-default-rtdb.firebaseio.com/message.json',
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(obj),
+                }
+            );
+
+            console.log(response);
+
+            if (!response.ok)
+                return console.log('Loi khong the day mess len firebase');
+
+            console.log('Day mess len firebase thanh cong');
+        },
     },
 };
 

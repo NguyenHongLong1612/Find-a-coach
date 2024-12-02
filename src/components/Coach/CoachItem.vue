@@ -13,19 +13,34 @@
             ></coach-expertise>
         </div>
         <div class="button-group">
-            <button class="contact-btn">Contact</button>
-            <button class="details-btn">Details</button>
+            <router-link
+                class="contact-btn"
+                :to="goToContactCoach()"
+                @click="setNameCoach({ id: id })"
+                >Contact
+            </router-link>
         </div>
     </div>
 </template>
 
 <script>
 import CoachExpertise from './CoachExpertise.vue';
+import { mapActions } from 'vuex';
 export default {
     components: {
         CoachExpertise,
     },
     props: ['id', 'name', 'rent', 'expertiseList'],
+    methods: {
+        ...mapActions('coach', ['setNameCoach']),
+
+        goToContactCoach() {
+            return {
+                name: 'contact-coach',
+                params: { id: this.id },
+            };
+        },
+    },
 };
 </script>
 
@@ -87,6 +102,7 @@ label {
     font-size: 0.9em;
     cursor: pointer;
     transition: background-color 0.3s;
+    text-decoration: none;
 }
 
 .contact-btn:hover,
