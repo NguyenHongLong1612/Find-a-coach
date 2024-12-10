@@ -4,7 +4,7 @@ const navigation = {
     namespaced: true,
 
     state: {
-        isActive: 'all-coaches',
+        isActive: 'login',
     },
 
     getters: {
@@ -20,8 +20,21 @@ const navigation = {
     },
 
     actions: {
-        setActive({ commit }, payload) {
+        setActive({ commit, rootGetters, dispatch, getters }, payload) {
             commit('setActive', payload);
+            if (rootGetters['auth/isAuth'] && getters.getActive === 'logout') {
+                dispatch(
+                    'auth/setUser',
+                    {
+                        idToken: null,
+                        expiresIn: null,
+                        localId: null,
+                    },
+                    { root: true }
+                );
+
+                commit('setActive', { name: 'login' });
+            }
         },
     },
 };

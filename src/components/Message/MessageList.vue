@@ -1,5 +1,11 @@
 <template>
     <p v-if="!getLoading">Loading ...</p>
+    <modal-dialog
+        v-else-if="getLoading && !getStatus"
+        title="Failed!"
+        text="You do not have permission to seen message."
+        icon="❎"
+    ></modal-dialog>
     <div v-else class="mess-list">
         <message-item
             v-for="mess in getList"
@@ -15,11 +21,13 @@
 
 <script>
 import MessageItem from './MessageItem.vue';
+import ModalDialog from '../Modal/ModalDialog.vue';
 import { mapActions, mapGetters } from 'vuex';
 
 export default {
     components: {
         MessageItem,
+        ModalDialog,
     },
 
     methods: {
@@ -35,7 +43,7 @@ export default {
     },
 
     computed: {
-        ...mapGetters('message', ['getList', 'getLoading']),
+        ...mapGetters('message', ['getList', 'getLoading', 'getStatus']),
     },
 
     mounted() {

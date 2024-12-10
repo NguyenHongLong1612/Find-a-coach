@@ -7,17 +7,43 @@
                 class="all-coaches"
                 :class="{ active: getActive === 'all-coaches' }"
                 @click="setActive({ name: 'all-coaches' })"
-            >
-                All Coaches
+                >All Coaches
             </router-link>
 
             <router-link
+                v-if="!isAuth"
+                :to="{ name: 'auth' }"
+                class="auth"
+                :class="{ active: getActive === 'login' }"
+                @click="setActive({ name: 'login' })"
+                >Login
+            </router-link>
+
+            <router-link
+                v-if="isAuth"
                 :to="goToAllMessagePage()"
                 class="all-mess"
                 :class="{ active: getActive === 'all-mess' }"
                 @click="setActive({ name: 'all-mess' })"
-            >
-                All Message
+                >All Message
+            </router-link>
+
+            <router-link
+                v-if="isAuth"
+                :to="{ name: 'register' }"
+                class="register-coach"
+                :class="{ active: getActive === 'register-coach' }"
+                @click="setActive({ name: 'register-coach' })"
+                >Register
+            </router-link>
+
+            <router-link
+                v-if="isAuth"
+                :to="{ name: 'auth' }"
+                class="auth"
+                :class="{ active: getActive === 'logout' }"
+                @click="setActive({ name: 'logout' })"
+                >Logout
             </router-link>
         </div>
     </div>
@@ -38,6 +64,7 @@ export default {
 
     computed: {
         ...mapGetters('navigation', ['getActive']),
+        ...mapGetters('auth', ['isAuth']),
     },
 };
 </script>
@@ -65,12 +92,15 @@ export default {
 
 .home-page,
 .all-coaches,
-.all-mess {
+.all-mess,
+.register-coach {
     cursor: pointer;
 }
 
 .all-coaches,
-.all-mess {
+.all-mess,
+.register-coach,
+.auth {
     background-color: antiquewhite;
     padding: 20px;
     border-radius: 20px;

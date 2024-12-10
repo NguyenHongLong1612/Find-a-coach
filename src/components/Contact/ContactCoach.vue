@@ -1,4 +1,13 @@
 <template>
+    <teleport to="body">
+        <modal-dialog
+            v-if="isOpenModal"
+            :title="modalTitle"
+            :text="modalText"
+            :icon="modalIcon"
+        ></modal-dialog>
+    </teleport>
+
     <form @submit.prevent="sendMessageToCoach">
         <label for="email">From: </label>
         <input
@@ -32,13 +41,21 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
+import ModalDialog from '../Modal/ModalDialog.vue';
 export default {
+    components: {
+        ModalDialog,
+    },
     data() {
         return {
             email: '',
             mess: '',
             emailIsInvalid: false,
             messIsInvalid: false,
+            isOpenModal: false,
+            modalTitle: '',
+            modalText: '',
+            modalIcon: '',
         };
     },
     props: ['id'],
@@ -62,6 +79,12 @@ export default {
             };
 
             this.postMessage(obj);
+
+            this.isOpenModal = true;
+            this.modalTitle = 'Success!';
+            this.modalText =
+                'Post information coach was completed successfully.';
+            this.modalIcon = '✅';
 
             this.email = '';
             this.mess = '';

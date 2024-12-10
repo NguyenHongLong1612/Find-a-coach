@@ -5,6 +5,7 @@ const message = {
     state: {
         list: [],
         isLoading: false,
+        isStatus: true,
     },
     getters: {
         getList(state) {
@@ -13,6 +14,9 @@ const message = {
         getLoading(state) {
             return state.isLoading;
         },
+        getStatus(state) {
+            return state.isStatus;
+        },
     },
     mutations: {
         setList(state, list) {
@@ -20,6 +24,9 @@ const message = {
         },
         setLoading(state, status) {
             state.isLoading = status;
+        },
+        setStatus(state, status) {
+            state.isStatus = status;
         },
         deleteMessWithId(state, payload) {
             const index = state.list.findIndex(
@@ -30,9 +37,11 @@ const message = {
         },
     },
     actions: {
-        async getMessData({ commit }) {
+        async getMessData({ commit, rootGetters }) {
+            const tokenId = rootGetters.getTokenId;
+
             const response = await fetch(
-                'https://find-a-coach-fa63d-default-rtdb.firebaseio.com/message.json',
+                `https://find-a-coach-fa63d-default-rtdb.firebaseio.com/message.json?auth=${tokenId}`,
                 {
                     method: 'GET',
                     headers: {
@@ -41,8 +50,11 @@ const message = {
                 }
             );
 
-            if (!response.ok)
-                return console.log('Loi day du lieu mess tu firebase');
+            if (!response.ok) {
+                console.log('Loi day du lieu mess tu firebase');
+                commit('setStatus', false);
+                return;
+            }
 
             const data = await response.json();
 
