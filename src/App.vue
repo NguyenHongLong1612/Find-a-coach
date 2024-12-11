@@ -5,10 +5,28 @@
 
 <script>
 import TheNavigationVue from './components/Navigator/TheNavigation.vue';
+import { mapActions, mapGetters } from 'vuex';
 export default {
     name: 'App',
     components: {
         TheNavigationVue,
+    },
+
+    methods: {
+        ...mapActions('auth', ['autoLogin']),
+        ...mapActions('navigation', ['setActive']),
+    },
+
+    computed: {
+        ...mapGetters('auth', ['isAuth']),
+    },
+
+    created() {
+        this.autoLogin();
+        if (this.isAuth) {
+            this.$router.push({ name: 'coach' });
+            this.setActive({ name: 'all-coaches' });
+        }
     },
 };
 </script>

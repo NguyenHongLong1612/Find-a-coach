@@ -126,6 +126,9 @@ const auth = {
             commit('setStatus', { status: true });
             commit('setLoading', { status: true });
             commit('setNameBtn', { nameBtn: 'btn-login' });
+
+            localStorage.setItem('tokenId', data.idToken);
+            localStorage.setItem('userId', data.localId);
         },
 
         setLoading({ commit }, payload) {
@@ -134,6 +137,19 @@ const auth = {
 
         setUser({ commit }, payload) {
             commit('setNewUser', payload);
+        },
+
+        autoLogin({ commit }) {
+            const token = localStorage.getItem('tokenId');
+            const userId = localStorage.getItem('userId');
+
+            if (token && userId) {
+                commit('setNewUser', {
+                    idToken: token,
+                    localId: userId,
+                    expiresIn: null,
+                });
+            }
         },
     },
 };
