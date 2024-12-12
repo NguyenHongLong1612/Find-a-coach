@@ -1,5 +1,9 @@
 'use strict';
 
+import router from '@/router';
+
+let clear;
+
 const auth = {
     namespaced: true,
     state: {
@@ -93,7 +97,7 @@ const auth = {
             commit('setNameBtn', { nameBtn: 'btn-signup' });
         },
 
-        async login({ commit }, payload) {
+        async login({ commit, dispatch }, payload) {
             const response = await fetch(
                 'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyCNH4NiXSZz4zV0x3sqjqdWC7JQeZTAjXk',
                 {
@@ -127,8 +131,21 @@ const auth = {
             commit('setLoading', { status: true });
             commit('setNameBtn', { nameBtn: 'btn-login' });
 
+            // const tokenExpires = 10000;
+            const tokenExpires = +data.expiresIn * 1000;
+            const expiresDate = new Date().getTime() + tokenExpires;
+
+            console.log(expiresDate);
+
             localStorage.setItem('tokenId', data.idToken);
             localStorage.setItem('userId', data.localId);
+            localStorage.setItem('expires', expiresDate);
+
+            clear = setTimeout(() => {
+                dispatch('logout');
+            }, tokenExpires);
+
+            console.log(clear);
         },
 
         setLoading({ commit }, payload) {
@@ -139,9 +156,15 @@ const auth = {
             commit('setNewUser', payload);
         },
 
-        autoLogin({ commit }) {
+        autoLogin({ commit, dispatch }) {
             const token = localStorage.getItem('tokenId');
             const userId = localStorage.getItem('userId');
+            const expires =
+                +localStorage.getItem('expires') - new Date().getTime();
+
+            if (expires < 0) {
+                return;
+            }
 
             if (token && userId) {
                 commit('setNewUser', {
@@ -149,7 +172,28 @@ const auth = {
                     localId: userId,
                     expiresIn: null,
                 });
+
+                clear = setTimeout(function () {
+                    dispatch('logout');
+                }, expires);
             }
+        },
+
+        logout({ commit }) {
+            localStorage.removeItem('tokenId');
+            localStorage.removeItem('userId');
+            localStorage.removeItem('expires');
+
+            commit('setNewUser', {
+                idToken: null,
+                expiresIn: null,
+                localId: null,
+            });
+
+            clearTimeout(clear);
+
+            router.push({ name: 'auth' });
+            commit('navigation/setActive', { name: 'login' }, { root: true });
         },
     },
 };

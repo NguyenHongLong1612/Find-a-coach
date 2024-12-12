@@ -22,18 +22,16 @@ const navigation = {
     actions: {
         setActive({ commit, rootGetters, dispatch, getters }, payload) {
             commit('setActive', payload);
-            if (rootGetters['auth/isAuth'] && getters.getActive === 'logout') {
-                dispatch(
-                    'auth/setUser',
-                    {
-                        idToken: null,
-                        expiresIn: null,
-                        localId: null,
-                    },
-                    { root: true }
-                );
-
-                commit('setActive', { name: 'login' });
+            if (
+                rootGetters['auth/isAuth'] &&
+                String(getters.getActive) === 'logout'
+            ) {
+                try {
+                    dispatch('auth/logout', null, { root: true });
+                    commit('setActive', { name: 'login' });
+                } catch (error) {
+                    console.error('Logout failed:', error);
+                }
             }
         },
     },

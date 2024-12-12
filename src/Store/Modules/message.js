@@ -38,7 +38,7 @@ const message = {
     },
     actions: {
         async getMessData({ commit, rootGetters }) {
-            const tokenId = rootGetters.getTokenId;
+            const tokenId = rootGetters['auth/getTokenId'];
 
             const response = await fetch(
                 `https://find-a-coach-fa63d-default-rtdb.firebaseio.com/message.json?auth=${tokenId}`,
